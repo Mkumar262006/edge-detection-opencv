@@ -49,34 +49,127 @@ Display all edge-detected images for comparison.
 
 ## Developed By
 
-- **Name:** ____________________________  
-- **Register No:** ______________________  
+- **Name:** Manoj kumar S
+- **Register No:** 212223240082
 
 ---
+
+
+## Program
+``` 
+# Step 1: Import all the necessary modules
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+```
+```
+# Step 2: Load an image using cv2.imread()
+image = cv2.imread(r'C:\Users\acer\Downloads\leena.jpeg')
+
+if image is None:
+    raise FileNotFoundError("red.jpg was not found. Place red.jpg in the same folder as this notebook.")
+
+image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+```
+```
+# Step 3: Convert the image to grayscale
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+plt.figure(figsize=(6, 5))
+plt.imshow(gray, cmap='gray')
+plt.title('Grayscale Image')
+plt.axis('off')
+plt.show()
+```
+```
+# Step 4: Apply Sobel operator
+sobel_x = cv2.Sobel(gray, cv2.CV_64F, 1, 0, ksize=3)
+sobel_y = cv2.Sobel(gray, cv2.CV_64F, 0, 1, ksize=3)
+sobel = cv2.magnitude(sobel_x, sobel_y)
+sobel = cv2.convertScaleAbs(sobel)
+```
+```
+# Step 5: Apply Prewitt operator using custom kernels
+prewitt_x = np.array([[-1, 0, 1],
+                      [-1, 0, 1],
+                      [-1, 0, 1]], dtype=np.float32)
+
+prewitt_y = np.array([[-1, -1, -1],
+                      [ 0,  0,  0],
+                      [ 1,  1,  1]], dtype=np.float32)
+
+px = cv2.filter2D(gray, cv2.CV_32F, prewitt_x)
+py = cv2.filter2D(gray, cv2.CV_32F, prewitt_y)
+prewitt = cv2.magnitude(px, py)
+prewitt = cv2.convertScaleAbs(prewitt)
+```
+```
+# Step 6: Apply Roberts operator using custom kernels
+roberts_x = np.array([[1, 0],
+                      [0, -1]], dtype=np.float32)
+
+roberts_y = np.array([[0, 1],
+                      [-1, 0]], dtype=np.float32)
+
+rx = cv2.filter2D(gray, cv2.CV_32F, roberts_x)
+ry = cv2.filter2D(gray, cv2.CV_32F, roberts_y)
+roberts = cv2.magnitude(rx, ry)
+roberts = cv2.convertScaleAbs(roberts)
+```
+```
+# Step 7: Apply Laplacian operator
+laplacian = cv2.Laplacian(gray, cv2.CV_64F)
+laplacian = cv2.convertScaleAbs(laplacian)
+```
+```
+# Step 8: Apply Canny edge detector
+canny = cv2.Canny(gray, 100, 200)
+```
+```
+# Step 9: Display all edge-detected images for comparison
+plt.figure(figsize=(15, 10))
+
+plt.subplot(2, 3, 1)
+plt.imshow(image_rgb)
+plt.title('Original Image')
+plt.axis('off')
+
+plt.subplot(2, 3, 2)
+plt.imshow(sobel, cmap='gray')
+plt.title('Sobel Edge Detection')
+plt.axis('off')
+
+plt.subplot(2, 3, 3)
+plt.imshow(prewitt, cmap='gray')
+plt.title('Prewitt Edge Detection')
+plt.axis('off')
+
+plt.subplot(2, 3, 4)
+plt.imshow(roberts, cmap='gray')
+plt.title('Roberts Edge Detection')
+plt.axis('off')
+
+plt.subplot(2, 3, 5)
+plt.imshow(laplacian, cmap='gray')
+plt.title('Laplacian Edge Detection')
+plt.axis('off')
+
+plt.subplot(2, 3, 6)
+plt.imshow(canny, cmap='gray')
+plt.title('Canny Edge Detection')
+plt.axis('off')
+
+plt.tight_layout()
+plt.show()
+```
 
 ## Output
 
-###  Sobel Edge Detector
-- Detects edges in horizontal and vertical directions  
-- Produces gradient-based edge map  
+<img width="602" height="550" alt="Screenshot 2026-11-22 110802" src="https://github.com/user-attachments/assets/07bbe7d9-1f81-4472-9862-fe4c7d649298" />
 
-###  Prewitt Edge Detector
-- Similar to Sobel but simpler kernel  
-- Detects directional edges  
+## Output
 
-###  Roberts Edge Detector
-- Detects edges using diagonal gradients  
-- Sensitive to noise  
-
-###  Laplacian Edge Detector
-- Detects edges using second-order derivatives  
-- Highlights rapid intensity changes  
-
-###  Canny Edge Detector
-- Multi-stage edge detection  
-- Produces clean and thin edges  
-
----
+<img width="1141" height="701" alt="Screenshot 2026-11-22 110750" src="https://github.com/user-attachments/assets/2c56c3e5-ce93-4dfd-96b7-dfec8d0fb6db" />
 
 ## Result
 
